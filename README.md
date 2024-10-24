@@ -23,4 +23,6 @@ The client side is built with React and Vite. It uses Tailwind CSS for styling a
    ```sh
    cd client
    npm install
+   run the application on localhost: npm run dev
    ```
+
