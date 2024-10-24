@@ -1,8 +1,26 @@
-# React + Vite
+## Client
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+The client side is built with React and Vite. It uses Tailwind CSS for styling and includes several pages and components.
 
-Currently, two official plugins are available:
+### Key Files and Directories
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- `src/App.jsx`: The main application component.
+- `src/main.jsx`: The entry point of the application.
+- `src/pages/`: Contains different pages like `Events`, `Home`, `Login`, `MyTickets`, `Profile`, and `Signup`.
+- `src/components/Navbar.jsx`: The navigation bar component.
+- `src/constant/constant.js`: Contains constant values used in the application.
+- `index.css`: Global CSS file.
+- `postcss.config.js`: Configuration for PostCSS.
+- `tailwind.config.js`: Configuration for Tailwind CSS.
+- `vite.config.js`: Configuration for Vite.
+
+### Setup
+
+1. **Install Dependencies**
+
+   Navigate to the `client` directory and install the dependencies:
+
+   ```sh
+   cd client
+   npm install
+   ```
