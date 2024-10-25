@@ -1,8 +1,8 @@
-## Client
+# Client
 
 The client side is built with React and Vite. It uses Tailwind CSS for styling and includes several pages and components.
 
-### Key Files and Directories
+## Key Files and Directories
 
 - `src/App.jsx`: The main application component.
 - `src/main.jsx`: The entry point of the application.
@@ -25,4 +25,3 @@ The client side is built with React and Vite. It uses Tailwind CSS for styling a
    npm install
    run the application on localhost: npm run dev
    ```
-

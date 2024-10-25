@@ -7,6 +7,8 @@ import Events from './pages/Events';
 import Profile from './pages/Profile';
 import Login from './pages/Login';
 import Signup from './pages/Signup';
+import ResellTickets from './pages/Resell';
+import TicketMarketplace from './pages/Marketplace';
 
 function App() {
   return (
@@ -26,6 +28,8 @@ function App() {
               <Route path="/profile" element={<Profile />} />
               <Route path="/login" element={<Login />} />
               <Route path="/signup" element={<Signup />} />
+              <Route path="/resell" element={<ResellTickets />} />
+              <Route path="/marketplace" element={<TicketMarketplace />} />
             </Routes>
           </main>
           <footer className="py-4 text-center text-gray-900 bg-opacity-30 backdrop-blur-sm">
