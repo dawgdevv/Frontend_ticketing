@@ -61,7 +61,7 @@ const TicketMarketplace = () => {
                         id="sortBy"
                         value={sortBy}
                         onChange={handleSort}
-                        className="px-4 py-2 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        className="px-4 py-2 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-black"
                     >
                         <option value="date">Date</option>
                         <option value="price">Price</option>
@@ -73,7 +73,7 @@ const TicketMarketplace = () => {
             <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
                 {filteredAndSortedTickets.map((ticket) => (
                     <div key={ticket.id} className="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300">
-                        <h2 className="text-xl font-semibold mb-2 text-blue-800">{ticket.eventName}</h2>
+                        <h2 className="text-xl font-semibold mb-2 text-black">{ticket.eventName}</h2>
                         <p className="text-gray-600 mb-1"><span className="font-medium">Date:</span> {ticket.date}</p>
                         <p className="text-gray-600 mb-1"><span className="font-medium">Price:</span> ${ticket.price}</p>
                         <p className="text-gray-600 mb-4"><span className="font-medium">Seller:</span> {ticket.seller}</p>

@@ -32,13 +32,13 @@ export default function Component() {
             <div className="mb-4">
                 <div className="flex border-b border-gray-200">
                     <button
-                        className={`py-2 px-4 ${activeTab === 'profile' ? 'border-b-2 border-blue-500 text-blue-500' : 'text-gray-500'}`}
+                        className={`py-2 px-4 ${activeTab === 'profile' ? 'border-b-2 border-black  text-gray-950' : 'text-gray-950'}`}
                         onClick={() => handleTabChange('profile')}
                     >
                         Profile Information
                     </button>
                     <button
-                        className={`py-2 px-4 ${activeTab === 'tickets' ? 'border-b-2 border-blue-500 text-blue-500' : 'text-gray-500'}`}
+                        className={`py-2 px-4 ${activeTab === 'tickets' ? 'border-b-2 border-black text-gray-950' : 'text-gray-950'}`}
                         onClick={() => handleTabChange('tickets')}
                     >
                         My Tickets
@@ -79,7 +79,7 @@ export default function Component() {
                                 className="mt-1 block w-full px-3 py-2 bg-gray-100 border border-gray-300 rounded-md shadow-sm focus:outline-none"
                             />
                         </div>
-                        <button className="w-full bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50">
+                        <button className="w-full bg-black text-white py-2 px-4 rounded hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50">
                             Edit Profile
                         </button>
                     </div>
@@ -100,7 +100,7 @@ export default function Component() {
                                         </div>
                                         <button
                                             onClick={() => openTicketDetails(ticket)}
-                                            className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
+                                            className="bg-black text-white px-4 py-2 rounded hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-opacity-50"
                                         >
                                             View Details
                                         </button>

@@ -40,11 +40,11 @@ const ResellTickets = () => {
 
     return (
         <div className="max-w-4xl mx-auto px-4 py-8">
-            <h1 className="text-3xl font-bold mb-6 text-center text-blue-600">Resell Your Tickets</h1>
+            <h1 className="text-3xl font-bold mb-6 text-center text-black">Resell Your Tickets</h1>
 
             <div className="grid gap-6 md:grid-cols-2">
                 <div className="bg-white p-6 rounded-lg shadow-md">
-                    <h2 className="text-xl font-semibold mb-4 text-blue-800">Your Tickets</h2>
+                    <h2 className="text-xl font-semibold mb-4 text-black">Your Tickets</h2>
                     <ul className="space-y-4">
                         {userTickets.map((ticket) => (
                             <li
@@ -64,7 +64,7 @@ const ResellTickets = () => {
                 </div>
 
                 <div className="bg-white p-6 rounded-lg shadow-md">
-                    <h2 className="text-xl font-semibold mb-4 text-blue-800">Resell Selected Ticket</h2>
+                    <h2 className="text-xl font-semibold mb-4 text-black">Resell Selected Ticket</h2>
                     {selectedTicket ? (
                         <div>
                             <p className="mb-2"><span className="font-semibold">Event:</span> {selectedTicket.eventName}</p>
@@ -81,7 +81,7 @@ const ResellTickets = () => {
                             </div>
                             <button
                                 onClick={handleResellTicket}
-                                className="w-full bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition-colors duration-300"
+                                className="w-full bg-black text-white px-4 py-2 rounded hover:bg-green-600 transition-colors duration-300"
                             >
                                 List for Resale
                             </button>
