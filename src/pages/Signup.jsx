@@ -1,34 +1,57 @@
 // Signup.jsx
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 const Signup = () => {
-    const [name, setName] = useState('');
+    const [username, setName] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const navigate = useNavigate();
 
-    const handleSubmit = (e) => {
+    const signup = async (e) => {
+
         e.preventDefault();
-        // Placeholder for actual signup logic
-        console.log('Name:', name);
-        console.log('Email:', email);
-        console.log('Password:', password);
-        // Redirect to home page after signup
-        navigate('/');
+        try {
+            const response = await fetch("http://localhost:8000/auth/signup", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ username, email, password }),
+            });
+
+            if (response.status === 409) {
+                return alert("User already exists");
+            }
+
+
+            if (response.ok) {
+                navigate('/login');        // Placeholder for actual login logic
+                console.log('Email:', email);
+                console.log('Password:', password);
+                // Redirect to home page after login
+            }
+            else {
+                alert("signup failed");
+            }
+        } catch (error) {
+            console.error(error);
+            alert("Error in signing up");
+        }
+
     };
 
     return (
         <div className="min-h-screen flex items-center justify-center bg-gray-300">
             <div className="max-w-md w-full bg-white p-8 rounded-lg shadow-md">
                 <h2 className="text-2xl font-bold mb-6 text-center">Sign Up</h2>
-                <form onSubmit={handleSubmit}>
+                <form onSubmit={signup}>
                     <div className="mb-4">
-                        <label htmlFor="name" className="block text-sm font-medium text-gray-700">Name</label>
+                        <label htmlFor="name" className="block text-sm font-medium text-gray-700">UserName</label>
                         <input
                             type="text"
                             id="name"
-                            value={name}
+                            value={username}
                             onChange={(e) => setName(e.target.value)}
                             required
                             className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"

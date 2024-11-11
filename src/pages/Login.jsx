@@ -1,5 +1,4 @@
-// Login.jsx
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 const Login = () => {
@@ -7,20 +6,47 @@ const Login = () => {
     const [password, setPassword] = useState('');
     const navigate = useNavigate();
 
-    const handleSubmit = (e) => {
+    const loginhandle = async (e) => {
         e.preventDefault();
-        // Placeholder for actual login logic
-        console.log('Email:', email);
-        console.log('Password:', password);
-        // Redirect to home page after login
-        navigate('/');
+        try {
+            const response = await fetch("http://localhost:8000/auth/login", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ email, password }),
+            });
+
+            if (response.status === 404) {
+                return alert("User not found");
+            }
+
+            if (response.status === 400) {
+                return alert("Invalid credentials");
+            }
+            if (response.ok) {
+                const data = await response.json();
+                localStorage.setItem("token", data.token);
+                navigate('/events');
+            } else {
+                alert("Login failed");
+            }
+
+
+
+        }
+
+        catch (error) {
+            console.error(error);
+            alert("Error in logging in");
+        }
     };
 
     return (
         <div className="min-h-screen flex items-center justify-center bg-gray-300">
             <div className="max-w-md w-full bg-white p-8 rounded-lg shadow-md">
                 <h2 className="text-2xl font-bold mb-6 text-center">Login</h2>
-                <form onSubmit={handleSubmit}>
+                <form onSubmit={loginhandle}>
                     <div className="mb-4">
                         <label htmlFor="email" className="block text-sm font-medium text-gray-700">Email</label>
                         <input
