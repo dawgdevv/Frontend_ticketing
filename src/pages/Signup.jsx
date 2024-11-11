@@ -26,10 +26,10 @@ const Signup = () => {
 
 
             if (response.ok) {
-                navigate('/login');        // Placeholder for actual login logic
+                navigate('/login');
                 console.log('Email:', email);
                 console.log('Password:', password);
-                // Redirect to home page after login
+
             }
             else {
                 alert("signup failed");
@@ -42,7 +42,7 @@ const Signup = () => {
     };
 
     return (
-        <div className="min-h-screen flex items-center justify-center bg-gray-300">
+        <div className="min-h-screen flex items-center justify-center">
             <div className="max-w-md w-full bg-white p-8 rounded-lg shadow-md">
                 <h2 className="text-2xl font-bold mb-6 text-center">Sign Up</h2>
                 <form onSubmit={signup}>
@@ -81,7 +81,7 @@ const Signup = () => {
                     </div>
                     <button
                         type="submit"
-                        className="w-full bg-indigo-600 text-white py-2 px-4 rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                        className="w-full bg-black text-white py-2 px-4 rounded-md hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                     >
                         Sign Up
                     </button>
