@@ -27,24 +27,19 @@ const Login = () => {
             if (response.ok) {
                 const data = await response.json();
                 localStorage.setItem("token", data.token);
-                localStorage.setItem("user", JSON.stringify(data.user));
-                navigate('/events');
+                localStorage.setItem("user", JSON.stringify({ username: data.username, email: data.email }));
+                navigate('/profile');
             } else {
                 alert("Login failed");
             }
-
-
-
-        }
-
-        catch (error) {
+        } catch (error) {
             console.error(error);
             alert("Error in logging in");
         }
     };
 
     return (
-        <div className="min-h-screen flex items-center justify-center bg-gray-300">
+        <div className="min-h-screen flex items-center justify-center">
             <div className="max-w-md w-full bg-white p-8 rounded-lg shadow-md">
                 <h2 className="text-2xl font-bold mb-6 text-center">Login</h2>
                 <form onSubmit={loginhandle}>
@@ -56,7 +51,7 @@ const Login = () => {
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
                             required
-                            className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                            className="mt-1 block w-full px-3 py-2 border border-gray-800 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                         />
                     </div>
                     <div className="mb-6">
@@ -67,7 +62,7 @@ const Login = () => {
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
                             required
-                            className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                            className="mt-1 block w-full px-3 py-2 border border-gray-800 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                         />
                     </div>
                     <button

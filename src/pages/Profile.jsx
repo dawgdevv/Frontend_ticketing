@@ -1,20 +1,30 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react';
 
-const tickets = [
-    { id: 1, eventName: 'Concert A', date: '2024-05-15', quantity: 2, seats: ['A1', 'A2'], venue: 'Stadium X' },
-    { id: 2, eventName: 'Festival B', date: '2024-06-20', quantity: 1, seats: ['B5'], venue: 'Park Y' },
-]
+function Profile() {
+    const [user, setUser] = useState({
+        name: '',
+        email: '',
+    });
+    const [activeTab, setActiveTab] = useState('profile');
+    const [selectedTicket, setSelectedTicket] = useState(null);
 
-export default function Component() {
-    const [user] = useState({
-        name: 'Nishant Raj',
-        email: 'nishantrajcs26@gmail.com',
-        joinDate: '19/11/2024',
-    })
-    const [activeTab, setActiveTab] = useState('profile')
-    const [selectedTicket, setSelectedTicket] = useState(null)
+    useEffect(() => {
+        try {
+            const userData = localStorage.getItem('user');
+            if (userData) {
+                const parsedUserData = JSON.parse(userData);
+                setUser({
+                    name: parsedUserData.username,
+                    email: parsedUserData.email,
+                });
+            }
+        } catch (error) {
+            console.error('Error parsing user data from localStorage:', error);
+            localStorage.removeItem('user'); // Clear invalid data
+        }
+    }, []);
 
     return (
         <div className="max-w-2xl mx-auto p-4">
@@ -55,16 +65,7 @@ export default function Component() {
                             className="w-full p-1 bg-gray-100 border rounded"
                         />
                     </div>
-                    <div className="mb-4">
-                        <label htmlFor="joinDate" className="block text-sm">Join Date</label>
-                        <input
-                            id="joinDate"
-                            type="text"
-                            value={user.joinDate}
-                            readOnly
-                            className="w-full p-1 bg-gray-100 border rounded"
-                        />
-                    </div>
+
                     <button className="w-full bg-black text-white p-2 rounded hover:bg-gray-800">
                         Edit Profile
                     </button>
@@ -113,5 +114,7 @@ export default function Component() {
                 </div>
             )}
         </div>
-    )
+    );
 }
+
+export default Profile;
