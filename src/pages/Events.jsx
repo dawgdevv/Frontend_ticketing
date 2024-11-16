@@ -4,7 +4,7 @@ import { loadStripe } from "@stripe/stripe-js";
 import { Elements } from "@stripe/react-stripe-js";
 import CheckoutForm from "../pages/checkoutform.jsx";
 import Modal from "../pages/modal.jsx";
-import { jsPDF } from "jspdf";  
+import { jsPDF } from "jspdf";
 
 const stripePromise = loadStripe(
   "pk_test_51QLIkbRwlFB03Gh52W76kjQaqVtMXt1tlXl61HihY6CcPcRfaRff6rDXKbBWcAnATNifWIP9TsV5Fu9w4UL8Wnmz00keNN6jlM"
@@ -34,13 +34,17 @@ const Events = () => {
         const response = await axios.post(
           "http://localhost:8000/tickets/book",
           { eventId: selectedEvent._id, quantity: 1, seats: ["A1"] },
-          { headers: { Authorization: `Bearer ${localStorage.getItem("token")}` } }
+          {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("token")}`,
+            },
+          }
         );
 
         console.log("Booking response:", response.data);
 
-        setTicketDetails(response.data.ticket); 
-        setIsModalOpen(true); 
+        setTicketDetails(response.data.ticket);
+        setIsModalOpen(true);
       } catch (error) {
         console.error("Booking failed:", error);
         alert("Booking failed. Please try again.");
@@ -54,7 +58,7 @@ const Events = () => {
     doc.setFont("helvetica", "normal");
     doc.setFontSize(20);
     doc.text("🎟️ Ticket Details", 20, 20);
-    
+
     doc.setFontSize(12);
     doc.text(`Event: ${ticketDetails?.event?.name || "N/A"}`, 20, 40);
     doc.text(`Venue: ${ticketDetails?.venue || "N/A"}`, 20, 50);
@@ -62,9 +66,11 @@ const Events = () => {
     doc.text(`Price: ${ticketDetails?.price || "N/A"}`, 20, 70);
     doc.text(`Quantity: ${ticketDetails?.quantity || "N/A"}`, 20, 80);
     doc.text(`Ticket ID: ${ticketDetails?._id || "N/A"}`, 20, 90);
-    
+
     // Save the PDF
     doc.save(`${ticketDetails?._id}_ticket.pdf`);
+
+    setTicketDetails(null);
   };
 
   const formatPrice = (price) => {
@@ -125,7 +131,7 @@ const Events = () => {
 
       {/* Ticket Details Modal */}
       {ticketDetails && (
-        <Modal isOpen={true} onClose={() => setIsModalOpen(false)}>
+        <Modal isOpen={true} onClose={() => setTicketDetails(null)}>
           <div className="ticket-details p-6 bg-blue-50 rounded-lg shadow-lg">
             <h2 className="text-3xl font-bold mb-4">🎟️ Ticket Details</h2>
             <p className="mb-2">
@@ -135,10 +141,12 @@ const Events = () => {
               <strong>Venue:</strong> {ticketDetails?.venue || "N/A"}
             </p>
             <p className="mb-2">
-              <strong>Seats:</strong> {ticketDetails?.seats?.join(", ") || "N/A"}
+              <strong>Seats:</strong>{" "}
+              {ticketDetails?.seats?.join(", ") || "N/A"}
             </p>
             <p className="mb-2">
-              <strong>Price:</strong> {formatPrice(ticketDetails?.price) || "N/A"}
+              <strong>Price:</strong>{" "}
+              {formatPrice(ticketDetails?.price) || "N/A"}
             </p>
             <p className="mb-2">
               <strong>Quantity:</strong> {ticketDetails?.quantity || "N/A"}
