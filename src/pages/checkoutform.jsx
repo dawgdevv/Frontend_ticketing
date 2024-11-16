@@ -62,7 +62,7 @@ const CheckoutForm = ({ amount, onPaymentSuccess }) => {
 
     if (result.error) {
       console.error("Payment failed:", result.error.message);
-      // Optionally, display an error message to the user
+      
     } else if (
       result.paymentIntent &&
       result.paymentIntent.status === "succeeded"

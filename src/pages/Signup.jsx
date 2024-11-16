@@ -6,7 +6,7 @@ const Signup = () => {
     const [username, setName] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const navigate = useNavigate();
+    const navigate = useNavigate();//after successful signup redirect login
 
     const signup = async (e) => {
 
@@ -52,8 +52,8 @@ const Signup = () => {
                             type="text"
                             id="name"
                             value={username}
-                            onChange={(e) => setName(e.target.value)}
-                            required
+                            onChange={(e) => setName(e.target.value)}//update the name filed when the user inputs
+                            required //its required to fill this field
                             className="mt-1 block w-full px-3 py-2 border border-gray-800 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                         />
                     </div>

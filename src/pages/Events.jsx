@@ -4,6 +4,7 @@ import { loadStripe } from "@stripe/stripe-js";
 import { Elements } from "@stripe/react-stripe-js";
 import CheckoutForm from "../pages/checkoutform.jsx";
 import Modal from "../pages/modal.jsx";
+import { jsPDF } from "jspdf";  
 
 const stripePromise = loadStripe(
   "pk_test_51QLIkbRwlFB03Gh52W76kjQaqVtMXt1tlXl61HihY6CcPcRfaRff6rDXKbBWcAnATNifWIP9TsV5Fu9w4UL8Wnmz00keNN6jlM"
@@ -13,6 +14,7 @@ const Events = () => {
   const [events, setEvents] = useState([]);
   const [selectedEvent, setSelectedEvent] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [ticketDetails, setTicketDetails] = useState(null);
 
   useEffect(() => {
     const fetchEvents = async () => {
@@ -26,35 +28,43 @@ const Events = () => {
     fetchEvents();
   }, []);
 
-  const bookTicket = async (eventId) => {
-    try {
-      const response = await axios.post(
-        "http://localhost:8000/tickets/book",
-        {
-          eventId,
-          quantity: 1,
-          seats: ["A1"],
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
-        }
-      );
-      if (response.status === 201) {
-        alert("Ticket booked successfully!");
+  const handlePaymentSuccess = async () => {
+    if (selectedEvent) {
+      try {
+        const response = await axios.post(
+          "http://localhost:8000/tickets/book",
+          { eventId: selectedEvent._id, quantity: 1, seats: ["A1"] },
+          { headers: { Authorization: `Bearer ${localStorage.getItem("token")}` } }
+        );
+
+        console.log("Booking response:", response.data);
+
+        setTicketDetails(response.data.ticket); 
+        setIsModalOpen(true); 
+      } catch (error) {
+        console.error("Booking failed:", error);
+        alert("Booking failed. Please try again.");
       }
-    } catch (error) {
-      console.error("Error booking ticket:", error);
-      alert(error.response?.data?.message || "Failed to book ticket.");
     }
   };
 
-  const handlePaymentSuccess = () => {
-    if (selectedEvent) {
-      bookTicket(selectedEvent._id);
-      setIsModalOpen(false);
-    }
+  const generateTicketPDF = () => {
+    const doc = new jsPDF();
+
+    doc.setFont("helvetica", "normal");
+    doc.setFontSize(20);
+    doc.text("🎟️ Ticket Details", 20, 20);
+    
+    doc.setFontSize(12);
+    doc.text(`Event: ${ticketDetails?.event?.name || "N/A"}`, 20, 40);
+    doc.text(`Venue: ${ticketDetails?.venue || "N/A"}`, 20, 50);
+    doc.text(`Seats: ${ticketDetails?.seats?.join(", ") || "N/A"}`, 20, 60);
+    doc.text(`Price: ${ticketDetails?.price || "N/A"}`, 20, 70);
+    doc.text(`Quantity: ${ticketDetails?.quantity || "N/A"}`, 20, 80);
+    doc.text(`Ticket ID: ${ticketDetails?._id || "N/A"}`, 20, 90);
+    
+    // Save the PDF
+    doc.save(`${ticketDetails?._id}_ticket.pdf`);
   };
 
   const formatPrice = (price) => {
@@ -102,6 +112,8 @@ const Events = () => {
           </div>
         ))}
       </div>
+
+      {/* Modal for payment */}
       <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
         <Elements stripe={stripePromise}>
           <CheckoutForm
@@ -110,6 +122,40 @@ const Events = () => {
           />
         </Elements>
       </Modal>
+
+      {/* Ticket Details Modal */}
+      {ticketDetails && (
+        <Modal isOpen={true} onClose={() => setIsModalOpen(false)}>
+          <div className="ticket-details p-6 bg-blue-50 rounded-lg shadow-lg">
+            <h2 className="text-3xl font-bold mb-4">🎟️ Ticket Details</h2>
+            <p className="mb-2">
+              <strong>Event:</strong> {ticketDetails?.event?.name || "N/A"}
+            </p>
+            <p className="mb-2">
+              <strong>Venue:</strong> {ticketDetails?.venue || "N/A"}
+            </p>
+            <p className="mb-2">
+              <strong>Seats:</strong> {ticketDetails?.seats?.join(", ") || "N/A"}
+            </p>
+            <p className="mb-2">
+              <strong>Price:</strong> {formatPrice(ticketDetails?.price) || "N/A"}
+            </p>
+            <p className="mb-2">
+              <strong>Quantity:</strong> {ticketDetails?.quantity || "N/A"}
+            </p>
+            <p className="mb-2">
+              <strong>Ticket ID:</strong> {ticketDetails?._id || "N/A"}
+            </p>
+
+            <button
+              onClick={generateTicketPDF}
+              className="mt-4 w-full bg-green-600 text-white px-4 py-2 rounded hover:bg-green-800 transition-colors duration-300"
+            >
+              Download Ticket PDF
+            </button>
+          </div>
+        </Modal>
+      )}
     </div>
   );
 };

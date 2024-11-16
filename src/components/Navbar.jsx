@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Link } from 'react-router-dom';
 
 const Navbar = () => {
-    const [isMenuOpen, setIsMenuOpen] = useState(false);
+    const [isMenuOpen, setIsMenuOpen] = useState(false); //using usestate hereto see if we are on moblile 
 
     return (
         <nav className="shadow-lg text-gray-800"> {/* Changed bg-blue-600 to text-gray-800 */}
