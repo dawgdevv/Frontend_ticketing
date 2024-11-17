@@ -91,6 +91,11 @@ const Events = () => {
             key={event._id}
             className="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300"
           >
+            <img
+              src={event.image}
+              alt={event.name}
+              className="event-image mb-4"
+            />
             <h2 className="text-2xl font-semibold mb-3 text-black">
               {event.name}
             </h2>
