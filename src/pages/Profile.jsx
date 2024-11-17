@@ -8,7 +8,6 @@ function Profile() {
   });
   const [activeTab, setActiveTab] = useState("profile");
   const [selectedTicket, setSelectedTicket] = useState(null);
-  const [userTickets, setUserTickets] = useState([]);
 
   useEffect(() => {
     try {
@@ -26,23 +25,15 @@ function Profile() {
     }
   }, []);
 
-  useEffect(() => {
-    // Fetch user tickets from the backend
-    const fetchUserTickets = async () => {
-      try {
-        const response = await axios.get("http://localhost:8000/tickets/user", {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
-        });
-        setUserTickets(response.data);
-      } catch (error) {
-        console.error("Error fetching user tickets:", error);
-      }
-    };
-
-    fetchUserTickets();
-  }, []);
+  const handleLogout = async () => {
+    try {
+      await axios.post("http://localhost:8000/auth/logout");
+      localStorage.removeItem("user");
+      window.location.href = "/login";
+    } catch (error) {
+      console.error("Error logging out:", error);
+    }
+  };
 
   return (
     <div className="max-w-2xl mx-auto p-4">
@@ -85,28 +76,32 @@ function Profile() {
             </label>
             <input
               id="email"
-              type="text"
+              type="email"
               value={user.email}
               readOnly
               className="w-full p-1 bg-gray-100 border rounded"
             />
           </div>
+
+          <button
+            onClick={handleLogout}
+            className="w-full bg-black text-white p-2 rounded hover:bg-gray-800"
+          >
+            Logout
+          </button>
         </div>
       )}
       {activeTab === "tickets" && (
         <div>
-          {userTickets.length > 0 ? (
+          {tickets.length > 0 ? (
             <ul>
-              {userTickets.map((ticket) => (
-                <li key={ticket.id} className="mb-2">
+              {tickets.map((ticket) => (
+                <li key={ticket.id} className="mb-4 p-2 border rounded">
                   <div className="flex justify-between items-center">
                     <div>
-                      <p className="font-semibold">{ticket.eventName}</p>
+                      <h3 className="font-semibold">{ticket.eventName}</h3>
                       <p className="text-sm text-gray-600">
                         Date: {ticket.date}
-                      </p>
-                      <p className="text-sm text-gray-600">
-                        Venue: {ticket.venue}
                       </p>
                     </div>
                     <button
