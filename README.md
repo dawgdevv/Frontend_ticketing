@@ -1,4 +1,5 @@
 # Client
+# (Nishant Dev Dhurv)
 
 The client side is built with React and Vite. It uses Tailwind CSS for styling and includes several pages and components.
 
