@@ -7,6 +7,7 @@ function Profile() {
     email: "",
   });
   const [activeTab, setActiveTab] = useState("profile");
+  const [tickets, setTickets] = useState([]);
   const [selectedTicket, setSelectedTicket] = useState(null);
 
   useEffect(() => {
@@ -24,6 +25,27 @@ function Profile() {
       localStorage.removeItem("user"); // Clear invalid data
     }
   }, []);
+
+  useEffect(() => {
+    const fetchTickets = async () => {
+      try {
+        const response = await axios.get(
+          "http://localhost:8000/auth/mytickets",
+          {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("token")}`,
+            },
+          }
+        );
+        setTickets(response.data);
+      } catch (error) {
+        console.error("Error fetching tickets:", error);
+      }
+    };
+    if (activeTab === "tickets") {
+      fetchTickets();
+    }
+  }, [activeTab]);
 
   const handleLogout = async () => {
     try {
@@ -53,7 +75,7 @@ function Profile() {
           }`}
           onClick={() => setActiveTab("tickets")}
         >
-          Tickets
+          My Tickets
         </button>
       </div>
       {activeTab === "profile" && (
@@ -96,12 +118,12 @@ function Profile() {
           {tickets.length > 0 ? (
             <ul>
               {tickets.map((ticket) => (
-                <li key={ticket.id} className="mb-4 p-2 border rounded">
+                <li key={ticket._id} className="mb-4 p-2 border rounded">
                   <div className="flex justify-between items-center">
                     <div>
-                      <h3 className="font-semibold">{ticket.eventName}</h3>
+                      <h3 className="font-semibold">{ticket.event.name}</h3>
                       <p className="text-sm text-gray-600">
-                        Date: {ticket.date}
+                        Date: {new Date(ticket.event.date).toLocaleDateString()}
                       </p>
                     </div>
                     <button
@@ -123,9 +145,11 @@ function Profile() {
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4">
           <div className="bg-white rounded p-4 max-w-sm w-full">
             <h2 className="text-lg font-semibold mb-2">
-              {selectedTicket.eventName} Details
+              {selectedTicket.event.name} Details
             </h2>
-            <p>Date: {selectedTicket.date}</p>
+            <p>
+              Date: {new Date(selectedTicket.event.date).toLocaleDateString()}
+            </p>
             <p>Venue: {selectedTicket.venue}</p>
             <p>Seats: {selectedTicket.seats.join(", ")}</p>
             <button

@@ -1,14 +1,8 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { loadStripe } from "@stripe/stripe-js";
-import { Elements } from "@stripe/react-stripe-js";
-import CheckoutForm from "../pages/checkoutform.jsx";
+
 import Modal from "../pages/modal.jsx";
 import { jsPDF } from "jspdf";
-
-const stripePromise = loadStripe(
-  "pk_test_51QLIkbRwlFB03Gh52W76kjQaqVtMXt1tlXl61HihY6CcPcRfaRff6rDXKbBWcAnATNifWIP9TsV5Fu9w4UL8Wnmz00keNN6jlM"
-);
 
 const Events = () => {
   const [events, setEvents] = useState([]);
@@ -28,9 +22,15 @@ const Events = () => {
     fetchEvents();
   }, []);
 
-  const handlePaymentSuccess = async () => {
+  const handleBooking = async () => {
     if (selectedEvent) {
       try {
+        const payload = {
+          eventId: selectedEvent._id,
+          quantity: 1,
+          seats: ["A1"],
+        };
+        console.log("Booking payload:", payload); // Add this line to log the payload
         const response = await axios.post(
           "http://localhost:8000/tickets/book",
           { eventId: selectedEvent._id, quantity: 1, seats: ["A1"] },
@@ -115,7 +115,7 @@ const Events = () => {
               className="w-full bg-black text-white px-4 py-2 rounded hover:bg-green-600 transition-colors duration-300"
               onClick={() => {
                 setSelectedEvent(event);
-                setIsModalOpen(true);
+                handleBooking();
               }}
             >
               Book Tickets
@@ -123,16 +123,6 @@ const Events = () => {
           </div>
         ))}
       </div>
-
-      {/* Modal for payment */}
-      <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
-        <Elements stripe={stripePromise}>
-          <CheckoutForm
-            amount={selectedEvent?.price * 100}
-            onPaymentSuccess={handlePaymentSuccess}
-          />
-        </Elements>
-      </Modal>
 
       {/* Ticket Details Modal */}
       {ticketDetails && (
