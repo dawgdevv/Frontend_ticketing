@@ -31,6 +31,12 @@ const Events = () => {
   const handlePaymentSuccess = async () => {
     if (selectedEvent) {
       try {
+        const payload = {
+          eventId: selectedEvent._id,
+          quantity: 1,
+          seats: ["A1"],
+        };
+        console.log("Booking payload:", payload);
         const response = await axios.post(
           "http://localhost:8000/tickets/book",
           { eventId: selectedEvent._id, quantity: 1, seats: ["A1"] },

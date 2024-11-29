@@ -25,6 +25,7 @@ const CheckoutForm = ({ amount, onPaymentSuccess }) => {
   const stripe = useStripe();
   const elements = useElements();
   const [clientSecret, setClientSecret] = useState("");
+  const [isProcessing, setIsProcessing] = useState(false);
 
   useEffect(() => {
     const createPaymentIntent = async () => {
@@ -50,9 +51,11 @@ const CheckoutForm = ({ amount, onPaymentSuccess }) => {
   const handleSubmit = async (event) => {
     event.preventDefault();
 
-    if (!stripe || !elements) {
+    if (!stripe || !elements || isProcessing) {
       return;
     }
+
+    setIsProcessing(true);
 
     const result = await stripe.confirmCardPayment(clientSecret, {
       payment_method: {
@@ -60,9 +63,10 @@ const CheckoutForm = ({ amount, onPaymentSuccess }) => {
       },
     });
 
+    setIsProcessing(false);
+
     if (result.error) {
       console.error("Payment failed:", result.error.message);
-      
     } else if (
       result.paymentIntent &&
       result.paymentIntent.status === "succeeded"
@@ -92,10 +96,10 @@ const CheckoutForm = ({ amount, onPaymentSuccess }) => {
       </div>
       <button
         type="submit"
-        disabled={!stripe || !clientSecret}
+        disabled={!stripe || !clientSecret || isProcessing}
         className="w-full bg-black text-white py-2 px-4 rounded-md hover:bg-green-600 transition-colors duration-300"
       >
-        Pay
+        {isProcessing ? "Processing..." : "Pay"}
       </button>
     </form>
   );
