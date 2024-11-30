@@ -7,7 +7,6 @@ function Profile() {
     email: "",
   });
   const [activeTab, setActiveTab] = useState("profile");
-  const [selectedTicket, setSelectedTicket] = useState(null);
 
   useEffect(() => {
     try {
@@ -47,14 +46,6 @@ function Profile() {
         >
           Profile
         </button>
-        <button
-          className={`px-2 py-1 ${
-            activeTab === "tickets" ? "border-b-2 border-black" : ""
-          }`}
-          onClick={() => setActiveTab("tickets")}
-        >
-          Tickets
-        </button>
       </div>
       {activeTab === "profile" && (
         <div>
@@ -89,52 +80,6 @@ function Profile() {
           >
             Logout
           </button>
-        </div>
-      )}
-      {activeTab === "tickets" && (
-        <div>
-          {tickets.length > 0 ? (
-            <ul>
-              {tickets.map((ticket) => (
-                <li key={ticket.id} className="mb-4 p-2 border rounded">
-                  <div className="flex justify-between items-center">
-                    <div>
-                      <h3 className="font-semibold">{ticket.eventName}</h3>
-                      <p className="text-sm text-gray-600">
-                        Date: {ticket.date}
-                      </p>
-                    </div>
-                    <button
-                      onClick={() => setSelectedTicket(ticket)}
-                      className="bg-black text-white px-2 py-1 rounded text-sm hover:bg-gray-800"
-                    >
-                      Details
-                    </button>
-                  </div>
-                </li>
-              ))}
-            </ul>
-          ) : (
-            <p>No tickets available.</p>
-          )}
-        </div>
-      )}
-      {selectedTicket && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4">
-          <div className="bg-white rounded p-4 max-w-sm w-full">
-            <h2 className="text-lg font-semibold mb-2">
-              {selectedTicket.eventName} Details
-            </h2>
-            <p>Date: {selectedTicket.date}</p>
-            <p>Venue: {selectedTicket.venue}</p>
-            <p>Seats: {selectedTicket.seats.join(", ")}</p>
-            <button
-              onClick={() => setSelectedTicket(null)}
-              className="mt-4 bg-gray-200 text-black px-2 py-1 rounded text-sm hover:bg-gray-300"
-            >
-              Close
-            </button>
-          </div>
         </div>
       )}
     </div>

@@ -1,44 +1,77 @@
 import { useState, useEffect } from "react";
-
-// Sample user's tickets data
-const initialUserTickets = [
-  { id: 1, eventName: "Summer Music Festival", date: "2023-07-15", price: 50 },
-  { id: 2, eventName: "Tech Conference 2023", date: "2023-08-22", price: 100 },
-  { id: 3, eventName: "Food & Wine Expo", date: "2023-09-10", price: 75 },
-];
+import Alert from "@mui/material/Alert";
+import AlertTitle from "@mui/material/AlertTitle";
+import axios from "axios";
 
 const ResellTickets = () => {
-  const [userTickets, setUserTickets] = useState(initialUserTickets);
+  const [userTickets, setUserTickets] = useState([]);
   const [selectedTicket, setSelectedTicket] = useState(null);
   const [resellPrice, setResellPrice] = useState("");
+  const [alert, setAlert] = useState({
+    open: false,
+    message: "",
+    severity: "success",
+  });
+
+  useEffect(() => {
+    const fetchUserTickets = async () => {
+      try {
+        const response = await axios.get("http://localhost:8000/auth/tickets", {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        });
+        setUserTickets(response.data);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    fetchUserTickets();
+  }, []);
 
   const handleSelectTicket = (ticket) => {
     setSelectedTicket(ticket);
-    setResellPrice(ticket.price.toString());
   };
 
   const handleResellPriceChange = (e) => {
     setResellPrice(e.target.value);
   };
 
-  const handleResellTicket = () => {
+  const handleResellTicket = async () => {
     if (selectedTicket && resellPrice) {
-      // In a real application, you would send this data to your backend
-      console.log(
-        `Listing ticket for ${selectedTicket.eventName} at $${resellPrice}`
-      );
+      try {
+        const response = await axios.post(
+          "http://localhost:8000/tickets/resell",
+          { ticketId: selectedTicket._id, price: resellPrice },
+          {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("token")}`,
+            },
+            timeout: 5000,
+          }
+        );
+        console.log("Resell response:", response.data);
+        const updatedTickets = userTickets.map((ticket) => {
+          if (ticket._id === selectedTicket._id) {
+            return { ...ticket, price: resellPrice };
+          } else {
+            return ticket;
+          }
+        });
+        console.log("Updated tickets:", updatedTickets);
+        setUserTickets(updatedTickets);
 
-      // Update the ticket price in the userTickets state
-      const updatedTickets = userTickets.map((ticket) =>
-        ticket.id === selectedTicket.id
-          ? { ...ticket, price: parseFloat(resellPrice) }
-          : ticket
-      );
-      setUserTickets(updatedTickets);
-
-      // Reset selection
-      setSelectedTicket(null);
-      setResellPrice("");
+        setSelectedTicket(null);
+        setResellPrice("");
+        setAlert({
+          open: true,
+          message: "Ticket listed for resale successfully",
+          severity: "success",
+        });
+      } catch (error) {
+        console.error("Reselling ticket failed:", error);
+        alert("Reselling ticket failed. Please try again.");
+      }
     }
   };
 
@@ -47,7 +80,18 @@ const ResellTickets = () => {
       <h1 className="text-3xl font-bold mb-6 text-center text-black">
         Resell Your Tickets
       </h1>
-
+      {alert.open && (
+        <Alert
+          severity={alert.severity}
+          onClose={() => setAlert({ ...alert, open: false })}
+          className="mb-4"
+        >
+          <AlertTitle>
+            {alert.severity === "success" ? "Success" : "Error"}
+          </AlertTitle>
+          {alert.message}
+        </Alert>
+      )}
       <div className="grid gap-6 md:grid-cols-2">
         <div className="bg-white p-6 rounded-lg shadow-md">
           <h2 className="text-xl font-semibold mb-4 text-black">
@@ -56,18 +100,20 @@ const ResellTickets = () => {
           <ul className="space-y-4">
             {userTickets.map((ticket) => (
               <li
-                key={ticket.id}
+                key={ticket._id}
                 className={`p-3 rounded-md cursor-pointer transition-colors duration-200 ${
-                  selectedTicket && selectedTicket.id === ticket.id
+                  selectedTicket && selectedTicket._id === ticket._id
                     ? "bg-blue-100 border-2 border-blue-500"
                     : "bg-gray-100 hover:bg-gray-200"
                 }`}
                 onClick={() => handleSelectTicket(ticket)}
               >
-                <p className="font-semibold">{ticket.eventName}</p>
-                <p className="text-sm text-gray-600">Date: {ticket.date}</p>
+                <p className="font-semibold">{ticket.event.name}</p>
                 <p className="text-sm text-gray-600">
-                  Current Price: ${ticket.price}
+                  Date: {new Date(ticket.event.date).toLocaleDateString()}
+                </p>
+                <p className="text-sm text-gray-600">
+                  Current Price: {ticket.price}
                 </p>
               </li>
             ))}
@@ -82,18 +128,19 @@ const ResellTickets = () => {
             <div>
               <p className="mb-2">
                 <span className="font-semibold">Event:</span>{" "}
-                {selectedTicket.eventName}
+                {selectedTicket.event.name}
               </p>
               <p className="mb-4">
-                <span className="font-semibold">Date:</span>{" "}
-                {selectedTicket.date}
+                <span className="font-semibold">Date:</span>
+                {""}
+                {new Date(selectedTicket.event.date).toLocaleDateString()}
               </p>
               <div className="mb-4">
                 <label
                   htmlFor="resellPrice"
                   className="block text-sm font-medium text-gray-700"
                 >
-                  New Price ($):
+                  New Price :
                 </label>
                 <input
                   type="number"

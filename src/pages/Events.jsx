@@ -100,7 +100,7 @@ const Events = () => {
             <img
               src={event.image}
               alt={event.name}
-              className="event-image mb-4"
+              className="event-image mb-4 rounded-md"
             />
             <h2 className="text-2xl font-semibold mb-3 text-black">
               {event.name}
