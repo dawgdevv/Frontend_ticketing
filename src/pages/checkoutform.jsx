@@ -86,7 +86,7 @@ const CheckoutForm = ({ amount, onPaymentSuccess }) => {
           htmlFor="card-element"
           className="block text-sm font-medium text-gray-700"
         >
-          Credit or debit card
+          Credit or Debit Card
         </label>
         <CardElement
           id="card-element"
@@ -94,6 +94,21 @@ const CheckoutForm = ({ amount, onPaymentSuccess }) => {
           className="p-3 border border-gray-300 rounded-md"
         />
       </div>
+      <p className="mb-2 text-sm text-gray-600">
+        Use this in test mode: <strong>4000 0035 6000 0008</strong>
+      </p>
+      <p className="mb-2 text-sm text-gray-600">
+        For cvv enter any three nunbers and for expiry date enter any future
+        date
+      </p>
+      <a
+        href="https://docs.stripe.com/testing"
+        target="_blank"
+        rel="noopener noreferrer"
+        className="text-blue-500 hover:underline mb-4 block"
+      >
+        click to get more test cards
+      </a>
       <button
         type="submit"
         disabled={!stripe || !clientSecret || isProcessing}

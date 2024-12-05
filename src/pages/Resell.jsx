@@ -28,6 +28,14 @@ const ResellTickets = () => {
     };
     fetchUserTickets();
   }, []);
+  useEffect(() => {
+    if (alert.open) {
+      setTimeout(() => {
+        setAlert({ ...alert, open: false });
+      }, 3000);
+      return () => clearTimeout();
+    }
+  }, [alert]);
 
   const handleSelectTicket = (ticket) => {
     setSelectedTicket(ticket);
