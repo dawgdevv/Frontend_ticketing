@@ -47,6 +47,13 @@ const Navbar = () => {
                 >
                   Auction
                 </Link>
+                <Link
+                  to="/organize-auction"
+                  className="hover:text-gray-600 px-3 py-2 rounded-md text-sm font-medium"
+                >
+                  {" "}
+                  Organize Auction{" "}
+                </Link>
               </div>
             </div>
           </div>

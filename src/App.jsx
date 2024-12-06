@@ -1,15 +1,15 @@
 //import React from 'react';
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import Navbar from './components/Navbar';
-import Home from './pages/Home';
-import Events from './pages/Events';
-import Profile from './pages/Profile';
-import Login from './pages/Login';
-import Signup from './pages/Signup';
-import ResellTickets from './pages/Resell';
-import TicketMarketplace from './pages/Marketplace';
-import Auction from './pages/Auction';
-
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import Navbar from "./components/Navbar";
+import Home from "./pages/Home";
+import Events from "./pages/Events";
+import Profile from "./pages/Profile";
+import Login from "./pages/Login";
+import Signup from "./pages/Signup";
+import ResellTickets from "./pages/Resell";
+import TicketMarketplace from "./pages/Marketplace";
+import Auction from "./pages/Auction";
+import OrganizeAuction from "./pages/Organizauction";
 
 function App() {
   return (
@@ -32,8 +32,7 @@ function App() {
               <Route path="/resell" element={<ResellTickets />} />
               <Route path="/marketplace" element={<TicketMarketplace />} />
               <Route path="/auction" element={<Auction />} />
-
-
+              <Route path="/organize-auction" element={<OrganizeAuction />} />
             </Routes>
           </main>
           <footer className="py-4 text-center text-gray-900 bg-opacity-30 backdrop-blur-sm">
